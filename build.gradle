@@ -1,0 +1,35 @@
+plugins {
+    id("java")
+    id("eclipse")
+}
+
+group = "org.bebraTech"
+version = "1"
+
+task customFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'org.bebraTech.Main'
+    }
+    archiveBaseName = 'jar'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+
+tasks.test {
+    useJUnitPlatform()
+}
